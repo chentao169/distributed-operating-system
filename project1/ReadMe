@@ -1,0 +1,67 @@
+Distributed Operating Systems Project 1
+
+name	    	      UFID		email
+Tao Chen	      18816215		taochen@cise.ufl.edu
+Yahui Han	      41442945		yahan@cise.ufl.edu
+
+To run this project1, we can use command: scala server N K np 
+np: the number of subproblem
+And N = 1000000, K = 24, np = 4 by default.
+
+The following result was tested on a MAC OS X, i5: 1 processor of 2 cores
+Time was measured in the unit of seconds
+anwers:
+1) The ruuning time for different size of work unit is listed in part 3.
+
+2) The result of running scala project1 1,000,000 4 is
+(no solution)
+
+3)The ideal work unit may be the one that utilizes all cores and at the same time 
+gives a lower real running time. For this analysis we used the number 100,000,000
+since the communication time is relatively smaller. The values we got were as follows:
+The running time for N=1000000 K=4
+work_unit	real 	user	sys	real/(user+sys)
+1,000		1.189	2.114	0.131	0.5296
+2,000		0.964	1.679	0.117	0.5370
+10,000		0.800	1.266	0.099   0.586
+20,000		0.796	1.180	0.118   0.613
+100,000		0.763	1.130	0.099   0.620
+200,000		0.818	1.123	0.093	0.672
+1,000,000	0.758 	0.975	0.087   0.713
+
+4)The largest problem we managed to solve is: 2000000000
+work_unit     	real     user    sys	real/(user+sys)
+200,000,000		23.314	 68.985	 2.138	0.3278
+500,000,000		23.069	 68.081	 1.792  0.3302
+1,000,000,000   28.423	 47.928	 1.481  0.5145
+2,000,000,000	39.055 	 39.086	 1.106 	0.9717
+
+------------------------------------------------------------------------------------------
+Bonus
+
+In this part, we create remote master actors on remote clients and delopy them to control 
+remote workers which are responsible for calculation. When all workers are done on each remote 
+client,they send message Finished to remote master actors. When every remote master find all 
+its worker finish their work, it would send message Finished to server. When server find all
+masters have sent message Finished to it, it would send message ShutDown to all remote
+master actors to tell them it is time to shut down.
+When remote works find the result, they would send the result to their masters and the master
+who control the specific worker would send the result to server.
+To run bonus part, we should run 10 remote clients first, then run local server.
+To run local server, we can use command: scala server N K np 
+np: the number of subproblem
+And N = 1000000, K = 24, np = 4 by default.
+
+debug procedure on cise lab machine: ( use lin114-01.cise.ufl.edu ~ lin114.10.cise.ufl.edu machine as remote clients by default)
+1) open terminal
+2) enter shell : bash
+3) add akka lib into classpath : export CLASSPATH+=:/opt/akka-2.2.1/lib/akka/netty-3.6.6.Final.jar:/opt/akka-2.2.1/lib/akka/protobuf-java-2.4.1.jar
+4) built sbt. The build.sbt file is also included in this fold.
+5) remote boot client program. The peer.sh file is also included in this fold.
+
+
+Reference:
+http://stackoverflow.com/questions/14934782/akka-2-1-minimal-remote-actor-example
+http://stackoverflow.com/questions/17182975/create-an-akka-actor-remotely-without-a-new-actorsystem
+http://doc.akka.io/docs/akka/snapshot/scala/remoting.html
+https://github.com/akka/akka/tree/master/akka-samples/akka-sample-remote
